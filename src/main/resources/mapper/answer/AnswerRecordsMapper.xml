@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.interview.mapper.answer.AnswerRecordsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="org.interview.entity.answer.AnswerRecords">
+        <result column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="answer_name" property="answerName" />
+        <result column="answer_duration" property="answerDuration" />
+        <result column="question_module" property="questionModule" />
+        <result column="question_count" property="questionCount" />
+        <result column="right_count" property="rightCount" />
+        <result column="error_count" property="errorCount" />
+        <result column="unanswer_count" property="unanswerCount" />
+        <result column="is_pass" property="isPass" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+        <result column="del_flag" property="delFlag" />
+        <result column="remarks" property="remarks" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="BaseColumns">
+        a.id,
+        a.user_id,
+        a.answer_name,
+        a.answer_duration,
+        a.question_module,
+        a.question_count,
+        a.right_count,
+        a.error_count,
+        a.unanswer_count,
+        a.is_pass,
+        a.create_by,
+        a.create_date,
+        a.update_by,
+        a.update_date,
+        a.del_flag,
+        a.remarks
+    </sql>
+
+</mapper>
