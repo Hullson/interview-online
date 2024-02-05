@@ -1,6 +1,7 @@
 package org.interview.entity.sys;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.interview.common.DataEntity;
@@ -24,6 +25,7 @@ public class User extends DataEntity {
     private String phone;               // 手机号码
     private String gender;              // 性别
     private String type;                // 账号类型
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastLoginTime;         // 最后登录时间
     private Integer expireDuration;     // 超时时长
 }

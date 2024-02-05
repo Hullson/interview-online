@@ -42,4 +42,90 @@
         a.remarks
     </sql>
 
+    <update id="delUser">
+        UPDATE sys_user SET del_flag = "1", update_date = NOW() WHERE id = #{id};
+    </update>
+
+    <update id="updateUser">
+        UPDATE sys_user SET
+        <trim suffixOverrides=",">
+            <if test="user != null">
+                <if test="user.password != null and user.password != ''">
+                    password = #{user.password}
+                </if>
+                <if test="user.userName != null and user.userName != ''">
+                    user_name = #{user.userName}
+                </if>
+                <if test="user.phone != null and user.phone != ''">
+                    phone = #{user.phone}
+                </if>
+                <if test="user.phone != null and user.phone != ''">
+                    phone = #{user.phone}
+                </if>
+                <if test="user.expireDuration != null and user.expireDuration != ''">
+                    expire_duration = #{user.expireDuration}
+                </if>
+                <if test="user.updaeBy != null and user.updaeBy != ''">
+                    update_by = #{user.updaeBy}
+                </if>
+            </if>
+        </trim>
+        WHERE id = #{user.id}
+        AND del_flag = "0"
+    </update>
+
+    <select id="login" resultMap="BaseResultMap">
+        SELECT
+            <trim>
+                <include refid="BaseColumns" />
+            </trim>
+        FROM sys_user a
+        <where>
+            <if test="user != null">
+                <if test="user.loginAccount != null and user.loginAccount != ''">
+                    AND a.login_account = #{user.loginAccount}
+                </if>
+                <if test="user.password != null and user.password != ''">
+                    AND a.password = #{user.password}
+                </if>
+                AND a.del_flag = "0"
+            </if>
+        </where>
+    </select>
+
+    <select id="listPage" resultMap="BaseResultMap">
+        SELECT
+            <trim>
+                <include refid="BaseColumns" />
+            </trim>
+        FROM sys_user a
+        <where>
+            <if test="user != null">
+                <if test="user.userName != null and user.userName != ''">
+                    AND a.user_name LIKE CONCAT('%',#{user.userName},'%')
+                </if>
+                <if test="user.phone != null and user.phone != ''">
+                    AND a.gender = #{user.gender}
+                </if>
+                <if test="user.type != null and user.type != ''">
+                    AND a.type = #{user.type}
+                </if>
+                AND a.del_flag = "0"
+            </if>
+        </where>
+        ORDER BY a.create_date DESC
+    </select>
+
+    <select id="getUserByAccount" resultMap="BaseResultMap">
+        SELECT
+            <trim>
+                <include refid="BaseColumns" />
+            </trim>
+        FROM sys_user a
+        <where>
+            a.login_account = #{loginAccount}
+            AND a.del_flag = "0"
+        </where>
+    </select>
+
 </mapper>

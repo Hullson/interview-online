@@ -34,4 +34,88 @@
         a.remarks
     </sql>
 
+    <update id="delDict">
+        UPDATE sys_dict SET del_flag = "1", update_date = NOW() WHERE id = #{id};
+    </update>
+
+    <update id="updateDict">
+        UPDATE sys_dict SET
+        <trim suffixOverrides=",">
+            <if test="dict != null">
+                <if test="dict.label != null and dict.label != ''">
+                    label = #{dict.label}
+                </if>
+                <if test="dict.value != null and dict.value != ''">
+                    value = #{dict.value}
+                </if>
+                <if test="dict.type != null and dict.type != ''">
+                    type = #{dict.type}
+                </if>
+                <if test="dict.sort != null">
+                    sort = #{dict.sort}
+                </if>
+                <if test="dict.description != null and dict.description != ''">
+                    description = #{dict.description}
+                </if>
+            </if>
+        </trim>
+        WHERE id = #{dict.id}
+        AND del_flag = "0"
+    </update>
+
+    <select id="listPage" resultMap="BaseResultMap">
+        SELECT
+            <trim>
+                <include refid="BaseColumns" />
+            </trim>
+        FROM sys_dict a
+        <where>
+            <if test="dict != null">
+                <if test="dict.label != null and dict.label != ''">
+                    AND label = #{dict.label}
+                </if>
+                <if test="dict.value != null and dict.value != ''">
+                    AND value = #{dict.value}
+                </if>
+                <if test="dict.type != null and dict.type != ''">
+                    AND type = #{dict.type}
+                </if>
+                AND a.del_flag = "0"
+            </if>
+        </where>
+        ORDER BY a.create_date desc
+    </select>
+
+    <select id="getListByType" resultMap="BaseResultMap">
+        SELECT
+            <trim>
+                <include refid="BaseColumns"/>
+            </trim>
+        FROM sys_dict a
+        WHERE a.type = #{type}
+        AND a.del_flag = "0"
+        ORDER BY a.create_date DESC
+    </select>
+
+    <select id="getListByLabel" resultMap="BaseResultMap">
+        SELECT
+        <trim>
+            <include refid="BaseColumns"/>
+        </trim>
+        FROM sys_dict a
+        WHERE a.label = #{label}
+        AND a.del_flag = "0"
+        ORDER BY a.create_date DESC
+    </select>
+
+    <select id="getDictByValue" resultMap="BaseResultMap">
+        SELECT
+        <trim>
+            <include refid="BaseColumns"/>
+        </trim>
+        FROM sys_dict a
+        WHERE a.value = #{value}
+        AND a.del_flag = "0"
+        ORDER BY a.create_date DESC
+    </select>
 </mapper>
