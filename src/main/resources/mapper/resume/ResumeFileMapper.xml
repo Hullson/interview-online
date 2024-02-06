@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="org.interview.entity.resume.ResumeFile">
         <result column="id" property="id" />
-        <result column="belong_user_id" property="belongUserId" />
+        <result column="user_id" property="userId" />
         <result column="user_name" property="userName" />
         <result column="tags" property="tags" />
         <result column="file_path" property="filePath" />
@@ -24,7 +24,7 @@
     <!-- 通用查询结果列 -->
     <sql id="BaseColumns">
         a.id,
-        a.belong_user_id,
+        a.user_id,
         a.user_name,
         a.tags,
         a.file_path,
@@ -39,5 +39,38 @@
         a.del_flag,
         a.remarks
     </sql>
+    
+    <update id="delResumeFile">
+        UPDATE resume_file SET del_flag = "1" AND update_date = NOW() WHERE id = #{id}
+    </update>
+    
+    <select id="listPage" resultMap="BaseResultMap">
+        SELECT
+            <trim>
+                <include refid="BaseColumns"></include>
+            </trim>
+        FROM resume_file a
+        <where>
+            <if test="resumeFile != null">
+                <if test="resumeFile.fileName != null and resumeFile.fileName != ''">
+                    AND a.file_name LIKE CONCAT ('%', #{resumeFile.fileName}, '%')
+                </if>
+                <if test="resumeFile.fileType != null and resumeFile.fileType != ''">
+                    AND a.file_type = ('%', #{resumeFile.fileType}, '%')
+                </if>
+                <if test="resumeFile.fileResource != null and resumeFile.fileResource != ''">
+                    AND a.file_resource = ('%', #{resumeFile.fileResource}, '%')
+                </if>
+                <if test="resumeFile.tags != null and resumeFile.tags != ''">
+                    AND a.tags = ('%', #{resumeFile.tags}, '%')
+                </if>
+                <if test="resumeFile.createBy != null and resumeFile.createBy != ''">
+                    AND a.create_by = ('%', #{resumeFile.createBy}, '%')
+                </if>
+                AND a.del_flag = "0"
+            </if>
+        </where>
+        ORDER BY a.create_date DESC
+    </select>
 
 </mapper>
