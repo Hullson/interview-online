@@ -7,8 +7,6 @@ import org.interview.service.sys.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @Author      : Hullson
  * @Date        : create in 2024-02-05
@@ -22,8 +20,8 @@ public class UserController {
     private UserServiceImpl userService;
 
     @PostMapping("save")
-    public R saveUser(@RequestBody User user, HttpServletRequest request) {
-        userService.saveUser(user, request);
+    public R saveUser(@RequestBody User user) {
+        userService.saveUser(user);
         return ResultUtils.success();
     }
 
@@ -34,8 +32,8 @@ public class UserController {
     }
 
     @PutMapping("update")
-    public R updateUser(@RequestBody User user, HttpServletRequest request) {
-        userService.updateUser(user, request);
+    public R updateUser(@RequestBody User user) {
+        userService.updateUser(user);
         return ResultUtils.success();
     }
 

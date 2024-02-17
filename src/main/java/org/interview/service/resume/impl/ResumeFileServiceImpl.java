@@ -6,15 +6,24 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.interview.common.BusinessException;
 import org.interview.entity.resume.ResumeFile;
 import org.interview.mapper.resume.ResumeFileMapper;
 import org.interview.service.resume.ResumeFileService;
 import org.interview.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 
 /**
  * @Author      : Hullson
@@ -73,20 +82,50 @@ public class ResumeFileServiceImpl extends ServiceImpl<ResumeFileMapper, ResumeF
         if (resumeFile.getFile() == null) {
             throw new BusinessException(500, "上传简历文件为空");
         }
-        MultipartFile file = resumeFile.getFile();
-        String fileName = FileUtils.getFileName(file);
+        MultipartFile multipartFile = resumeFile.getFile();
+        String fileName = FileUtils.getFileName(multipartFile);
         // todo 新增文件名生成 + 数字 防止重复
         String newFileName = resumeFile.getUserName() + "_" + fileName + "[" + resumeFile.getTags() + "]";
-        String fileType = FileUtils.getFileSuffix(file);
-        Long fileSize = file.getSize();
+        String fileType = FileUtils.getFileSuffix(multipartFile);
+        Long fileSize = multipartFile.getSize();
 
+        try {
+            File file = new File(filePath);
+            if (!file.exists()) {
+                if (!file.mkdir()) {
+                    throw new BusinessException(500, "目录创建失败");
+                }
+            }
+            File saveFile = new File(filePath, newFileName);
+            multipartFile.transferTo(saveFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(500, "文件上传失败");
+        }
+        resumeFile.setFilePath(filePath);
         resumeFile.setFileName(newFileName);
         resumeFile.setFileType(fileType);
         resumeFile.setFileSize(fileSize);
+        resumeFile.preInsert();
+        baseMapper.insert(resumeFile);
+    }
 
+    @Override
+    public void exportResumeFile(String resumeId, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ResumeFile resumeFile = baseMapper.selectById(resumeId);
+        File file = new File(resumeFile.getFilePath(), resumeFile.getFileName());
+        String fileName = resumeFile.getFileName() + resumeFile.getFileType();
+        response.reset();
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
 
-
-
-
+        InputStream in = new FileInputStream(file);
+        ServletOutputStream outputStream = response.getOutputStream();
+        IOUtils.copy(in, outputStream);
+        // 关闭输出流 否则下载文件会提示网络问题无法下载
+        outputStream.flush();
+        outputStream.close();
     }
 }

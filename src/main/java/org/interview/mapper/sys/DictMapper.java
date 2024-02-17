@@ -11,8 +11,8 @@ public interface DictMapper extends BaseMapper<Dict> {
     void delDict(@Param("id") String id);
     void updateDict(@Param("dict")Dict dict);
 
-    List<Dict> listPage(Page<Dict> page, @Param("dict")Dict dict);
-    List<Dict> getListByType(@Param("type")String type);
-    List<Dict> getListByLabel(@Param("label")String label);
-    Dict getDictByValue(@Param("value")String value);
+    List<Dict> listPage(Page<Dict> page, @Param("dict") Dict dict);
+    List<Dict> getListByType(@Param("type") String type);
+    List<Dict> getListByLabel(@Param("label") String label);
+    Dict getDictByValue(@Param("value") String value);
 }

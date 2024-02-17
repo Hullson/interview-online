@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface UserService extends IService<User> {
     User login(User user, HttpServletRequest request);
-    void saveUser(User user, HttpServletRequest request);
+    void saveUser(User user);
     void delUser(String id);
-    void updateUser(User user, HttpServletRequest request);
+    void updateUser(User user);
 
     Page<User> listPage(User user, Integer pageNum, Integer pageSize);
     User getUserByAccount(String loginAccount);

@@ -3,6 +3,7 @@ package org.interview.entity.sys;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.interview.common.DataEntity;
 
 /**
@@ -13,6 +14,7 @@ import org.interview.common.DataEntity;
 
 @Data
 @NoArgsConstructor
+@Accessors(chain = true)
 @TableName("sys_dict")
 public class Dict extends DataEntity {
     private String label;           // 字典标签

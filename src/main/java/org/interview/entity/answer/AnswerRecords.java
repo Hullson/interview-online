@@ -3,6 +3,7 @@ package org.interview.entity.answer;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.interview.common.DataEntity;
 
 /**
@@ -13,6 +14,7 @@ import org.interview.common.DataEntity;
 
 @Data
 @NoArgsConstructor
+@Accessors(chain = true)
 @TableName("answer_records")
 public class AnswerRecords extends DataEntity {
     private String userId;              // 用户ID

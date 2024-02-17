@@ -30,4 +30,36 @@
         a.remarks
     </sql>
 
+    <update id="updateOption">
+        UPDATE option_store SET
+        <if test="options != null">
+            <if test="options.questionId != null and options.questionId != ''">
+                question_id = #{options.questionId}
+            </if>
+            <if test="options.option_content != null and options.optionContent != ''">
+                option_content = #{options.optionContent}
+            </if>
+            <if test="options.isRight != null and options.isRight != ''">
+                is_right = #{options.isRight}
+            </if>
+        </if>
+        WHERE id = #{options.id}
+        AND del_flag = "0"
+    </update>
+    
+    <update id="deleteOption">
+        UPDATE option_store SET del_flag = "1", update_date = NOW() WHERE id = #{id}
+    </update>
+
+    <select id="getListByQuestion" resultMap="BaseResultMap">
+        SELECT
+            <trim>
+                <include refid="BaseColumns" />
+            </trim>
+        FROM question_store a
+        WHERE a.question_id = #{questionId}
+        AND a.del_flag = "0"
+        ORDER BY a.create_date DESC
+    </select>
+
 </mapper>

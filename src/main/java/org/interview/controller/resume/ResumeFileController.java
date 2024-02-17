@@ -7,6 +7,10 @@ import org.interview.service.resume.impl.ResumeFileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * @Author      : Hullson
  * @Date        : create in 2024-02-06
@@ -36,5 +40,13 @@ public class ResumeFileController {
     public R bindResumeFile2User(@ModelAttribute ResumeFile resumeFile) {
         resumeFileService.bindResume2User(resumeFile);
         return ResultUtils.success();
+    }
+
+    @GetMapping("exportResumeFile/{id}")
+    public void exportResumeFile(@PathVariable("id") String id,
+                              HttpServletRequest request,
+                              HttpServletResponse response
+    ) throws IOException {
+        resumeFileService.exportResumeFile(id, request, response);
     }
 }

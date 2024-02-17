@@ -12,6 +12,8 @@ import org.interview.mapper.sys.UserMapper;
 import org.interview.service.sys.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -58,10 +60,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 新增用户
      * @param user      用户实体类
-     * @param request   请求Request域
      */
     @Override
-    public void saveUser(User user, HttpServletRequest request) {
+    public void saveUser(User user) {
         log.info(" ----> 用户名: {}", user.getUserName());
         log.info(" ----> 登录账号: {}", user.getPassword());
         // 判断新增用户信息
@@ -85,16 +86,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         // todo 密码加密
         user.setParentId("0");
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         HttpSession session = request.getSession();
-        String userId = (String) session.getAttribute("userId");
+        String userId = (String)session.getAttribute("userId");
         if ("2".equals(user.getType())) {
             user.setParentId(userId);
         }
         if (!"2".equals(user.getType()) && user.getExpireDuration() == 0) {
             user.setExpireDuration(-1);
         }
-        user.setCreateBy(userId);
-        user.setUpdateBy(userId);
         user.preInsert();
         baseMapper.insert(user);
         log.info(" ----> 新增用户 {} 成功", user.getUserName());
@@ -115,17 +115,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 修改用户信息
      * @param user      用户实体类
-     * @param request   请求Request域
      */
     @Override
-    public void updateUser(User user, HttpServletRequest request) {
+    public void updateUser(User user) {
         if (user == null) {
             throw new BusinessException(500, "修改用户不能为空");
         }
         user.preUpdate();
-        HttpSession session = request.getSession();
-        String userId = (String) session.getAttribute("userId");
-        user.setUpdateBy(userId);
         baseMapper.updateById(user);
     }
 

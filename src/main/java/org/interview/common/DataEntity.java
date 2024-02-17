@@ -1,12 +1,17 @@
 package org.interview.common;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.interview.utils.GenerateID;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -15,10 +20,10 @@ import java.util.List;
  * @Date        : created in 2024-02-04
  * @Description : 通用实体类
  */
+// 一切实体类都需要实例化
 @Data
 @NoArgsConstructor
-public class DataEntity {
-
+public class DataEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final String DEL_NORMAL = "0";
@@ -26,14 +31,12 @@ public class DataEntity {
 
     private String id;
     private String createBy;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createDate;
     private String updateBy;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateDate;
     private String delFlag;
-    private String remark;
-
+    private String remarks;
+    @TableField(exist = false)
     private List<OrderItem> orders;
 
     public DataEntity(String id) {
@@ -45,12 +48,22 @@ public class DataEntity {
         if (StringUtils.isEmpty(this.id)) {
             setId(GenerateID.generateUUID());
         }
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpSession session = request.getSession();
+        String userId = (String)session.getAttribute("userId");
+        System.out.println(" ----> 用户信息：" + userId);
+        this.setCreateBy(userId);
+        this.setUpdateBy(userId);
         this.setCreateDate(new Date());
         this.setUpdateDate(new Date());
         this.delFlag = DEL_NORMAL;
     }
 
     public void preUpdate() {
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpSession session = request.getSession();
+        String userId = (String)session.getAttribute("userId");
+        this.setUpdateBy(userId);
         this.setUpdateDate(new Date());
     }
 }

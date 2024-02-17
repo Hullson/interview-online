@@ -10,9 +10,9 @@ import java.util.List;
 public interface UserMapper extends BaseMapper<User> {
     void delUser(@Param("id") String id);
     void updateUser(@Param("user") User user);
-    User login(@Param("user")User user);
+    User login(@Param("user") User user);
 
-    List<User> listPage(Page<User> page, @Param("user")User user);
+    List<User> listPage(Page<User> page, @Param("user") User user);
     User getUserByAccount(@Param("loginAccount") String loginAccount);
 
 }

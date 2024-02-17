@@ -40,4 +40,37 @@
         a.remarks
     </sql>
 
+    <select id="getListByRecord" resultMap="BaseResultMap">
+        SELECT
+            <trim>
+                <include refid="BaseColumns" />
+            </trim>
+        FROM answer_details a
+        WHERE a.record_id = #{recordId}
+        AND a.del_flag = "0"
+        ORDER BY a.create_date DESC
+    </select>
+
+    <select id="getListByUser" resultMap="BaseResultMap">
+        SELECT
+        <trim>
+            <include refid="BaseColumns" />
+        </trim>
+        FROM answer_details a
+        WHERE a.user_id = #{userId}
+        AND a.del_flag = "0"
+        ORDER BY a.create_date DESC
+    </select>
+
+    <select id="getListByQuestion" resultMap="BaseResultMap">
+        SELECT
+        <trim>
+            <include refid="BaseColumns" />
+        </trim>
+        FROM answer_details a
+        WHERE a.question_id = #{questionId}
+        AND a.del_flag = "0"
+        ORDER BY a.create_date DESC
+    </select>
+
 </mapper>

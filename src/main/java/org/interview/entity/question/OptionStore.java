@@ -3,6 +3,7 @@ package org.interview.entity.question;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.interview.common.DataEntity;
 
 /**
@@ -13,6 +14,7 @@ import org.interview.common.DataEntity;
 
 @Data
 @NoArgsConstructor
+@Accessors(chain = true)
 @TableName("option_store")
 public class OptionStore extends DataEntity {
     private String questionId;      // 题目ID

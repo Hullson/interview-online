@@ -13,6 +13,31 @@ spring:
     username: normal
     password: AdTime06@17
 
+  # redis setting
+  redis:
+    host: 107.172.180.188
+    port: 6379
+    password: redis@1012
+    database: 1
+    timeout: 5s
+    jedis:
+      pool:
+        min-idle: 0
+        max-idle: 8
+        max-active: 60000
+        max-wait: -1ms
+
+  # jackson setting
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  servlet:
+    # multipart file setting
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
 # mybatis setting
 mybatis:
   # 配置别名
@@ -39,4 +64,23 @@ mybatis-plus:
       logic-not-delete-value: 0 # 配置逻辑未删除值
 
 resume-file:
-  path: "D:\项目code\Java\project\File"
+  path: "D:\\项目code\\Java\\project\\File"
+
+# jwt setting
+jwt:
+  tokenHeader: "Authenrization"
+  tokenPrefix: "JwtAuth "
+  # 签发者
+  iss: "woo"
+  # secret key
+  secret: "woo_system@"
+  # redis cache key prefix
+  cacheKeyPrefix: "JwtAuth:"
+  # 登录有效时间
+  loginValidateTime: 2h
+  # "记住我"有效时间
+  rememberValidateTime: 3d
+  # 登录刷新时间
+  loginRefreshLimit: 45m
+  # token有效时间
+  tokenExpireTime: 1d

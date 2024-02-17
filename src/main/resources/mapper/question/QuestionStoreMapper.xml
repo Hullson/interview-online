@@ -40,4 +40,66 @@
         a.remarks
     </sql>
 
+    <update id="updateQuestion">
+        UPDATE question_store SET
+        <if test="question != null">
+            <if test="question.type != null and question.type != ''">
+                type = #{question.type}
+            </if>
+            <if test="question.module != null and question.module != ''">
+                module = #{question.module}
+            </if>
+            <if test="question.tags != null and question.tags != ''">
+                tags = #{question.tags}
+            </if>
+            <if test="question.title != null and question.title != ''">
+                title = #{question.title}
+            </if>
+            <if test="question.content != null and question.content != ''">
+                content = #{question.content}
+            </if>
+            <if test="question.imagePath != null and question.imagePath != ''">
+                image_path = #{question.imagePath}
+            </if>
+            <if test="question.codeType != null and question.codeType != ''">
+                code_type = #{question.codeType}
+            </if>
+            <if test="question.codeContent != null and question.codeContent != ''">
+                code_content = #{question.codeContent}
+            </if>
+        </if>
+        WHERE id = #{question.id}
+        AND del_flag = "0"
+    </update>
+    
+    <update id="deleteQuestion">
+        UPDATE  question_store  SET update_date = NOW(), del_flag = "1" WHERE id = #{id}
+    </update>
+
+    <select id="listPage" resultMap="BaseResultMap">
+        SELECT
+            <trim>
+                <include refid="BaseColumns"/>
+            </trim>
+        FROM question_store a
+        <where>
+            <if test="question != null">
+                <if test="question.title != null and question != ''">
+                    AND a.title LIKE CONCAT ('%', #{question.title}, '%')
+                </if>
+                <if test="question.type != null and question.type != ''">
+                    AND a.type = #{question.type}
+                </if>
+                <if test="question.module != null and question.module != ''">
+                    AND a.module = #{question.module}
+                </if>
+                <if test="question.tags != null and question.tags != ''">
+                    AND a.tags = #{question.tags}
+                </if>
+                AND a.del_flag = "0"
+            </if>
+        </where>
+        ORDER BY a.create_date DESC
+    </select>
+
 </mapper>

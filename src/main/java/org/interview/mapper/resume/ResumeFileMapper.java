@@ -10,6 +10,6 @@ import java.util.List;
 public interface ResumeFileMapper extends BaseMapper<ResumeFile> {
 
     void delResumeFile(@Param("id") String id);
-    List<ResumeFile> listPage(Page<ResumeFile> page, @Param("resumeFile")ResumeFile resumeFile);
+    List<ResumeFile> listPage(Page<ResumeFile> page, @Param("resumeFile") ResumeFile resumeFile);
 
 }

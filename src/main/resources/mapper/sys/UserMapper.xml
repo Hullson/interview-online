@@ -102,7 +102,7 @@
         <where>
             <if test="user != null">
                 <if test="user.userName != null and user.userName != ''">
-                    AND a.user_name LIKE CONCAT('%',#{user.userName},'%')
+                    AND a.user_name = #{user.userName}
                 </if>
                 <if test="user.phone != null and user.phone != ''">
                     AND a.gender = #{user.gender}
