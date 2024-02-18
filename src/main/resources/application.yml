@@ -1,6 +1,8 @@
 # server setting
 server:
   port: 18809
+  servlet:
+    context-path: /interview # global prefix setting
 
 # spring-boot setting
 spring:

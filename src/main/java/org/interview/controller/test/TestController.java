@@ -1,6 +1,8 @@
 package org.interview.controller.test;
 
 import lombok.extern.slf4j.Slf4j;
+import org.interview.common.R;
+import org.interview.common.ResultUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +22,8 @@ import javax.servlet.http.HttpSession;
 public class TestController {
 
     @GetMapping("connect")
-    public String test() {
-        return "connect success";
+    public R test() {
+        return ResultUtils.success("connect success");
     }
 
     @GetMapping("getSessionId")
