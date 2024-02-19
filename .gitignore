@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### ignore application.yml file commit
+/src/main/resources/application.yml

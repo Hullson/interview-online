@@ -16,6 +16,8 @@ import org.interview.common.DataEntity;
 @Accessors(chain = true)
 @TableName("sys_role")
 public class Role extends DataEntity {
-    private String roleName;    // 角色名称
-    private String roleType;    // 角色类型
+    private String roleName;        // 角色名称
+    private String roleType;        // 角色类型
+    private String roleIdentify;    // 角色标识
+    private Integer sort;           // 排序
 }
